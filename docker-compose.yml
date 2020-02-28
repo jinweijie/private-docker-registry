@@ -1,6 +1,7 @@
 version: '3'
 services:
   registry:
+    container_name: docker_registry
     restart: always
     image: registry:2
     environment:
@@ -10,13 +11,43 @@ services:
       - "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm"
       - "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd"
       - "REGISTRY_HTTP_SECRET=YOUR_SECRET"
+      - "REGISTRY_STORAGE_DELETE_ENABLED=true"
     volumes:
       - ./registry:/var/lib/registry
       - ./letsencrypt/:/certs
       - ./auth:/auth
     ports:
       - "9999:5000"
+  ui:
+    container_name: docker_registry_ui
+    image: jc21/registry-ui
+    environment:
+      - NODE_ENV=production
+      - REGISTRY_HOST=registry:5000
+      - REGISTRY_SSL=true
+      - REGISTRY_DOMAIN=YOU_DOMAIN:9999
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
+      - REGISTRY_USER=YOUR_USER_NAME
+      - REGISTRY_PASS=YOUR_PASSWORD
+    links:
+      - registry
+    restart: always
+
+  proxy:
+    container_name: docker_registry_proxy
+    image: jc21/registry-ui-proxy
+    ports:
+      - 9998:80
+    depends_on:
+      - ui
+      - registry
+    links:
+      - ui
+      - registry
+    restart: always
+
   lets-nginx:
+    container_name: docker_registry_lets_nginx_certs
     image: smashwilson/lets-nginx:latest
     restart: always
     volumes:
