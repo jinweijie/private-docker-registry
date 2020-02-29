@@ -11,7 +11,7 @@ services:
       - "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm"
       - "REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd"
       - "REGISTRY_HTTP_SECRET=YOUR_SECRET"
-      - "REGISTRY_STORAGE_DELETE_ENABLED=true"
+      #- "REGISTRY_STORAGE_DELETE_ENABLED=true"
     volumes:
       - ./registry:/var/lib/registry
       - ./letsencrypt/:/certs
@@ -27,9 +27,9 @@ services:
       - REGISTRY_HOST=registry:5000
       - REGISTRY_SSL=true
       - REGISTRY_DOMAIN=YOU_DOMAIN:9999
-      - REGISTRY_STORAGE_DELETE_ENABLED=true
       - REGISTRY_USER=YOUR_USER_NAME
       - REGISTRY_PASS=YOUR_PASSWORD
+      #- REGISTRY_STORAGE_DELETE_ENABLED=true
     links:
       - registry
     restart: always
