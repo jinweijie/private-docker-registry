@@ -18,9 +18,10 @@ services:
       - ./auth:/auth
     ports:
       - "9999:5000"
+      
   ui:
     container_name: docker_registry_ui
-    image: jc21/registry-ui
+    image: jc21/registry-ui:latest
     environment:
       - NODE_ENV=production
       - REGISTRY_HOST=registry:5000
@@ -35,9 +36,7 @@ services:
 
   proxy:
     container_name: docker_registry_proxy
-    image: jc21/registry-ui-proxy
-    ports:
-      - 9998:80
+    image: jc21/registry-ui-proxy:latest
     depends_on:
       - ui
       - registry
@@ -58,4 +57,6 @@ services:
     environment:
       - "EMAIL=YOUR_EMAIL"
       - "DOMAIN=YOU_DOMAIN"
-      - "UPSTREAM=registry:5000"
+      - "UPSTREAM=registry-proxy:80"  #reverse proxy for docker registry ui
+    ports:
+      - "9998:443"

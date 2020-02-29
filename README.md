@@ -10,4 +10,4 @@
 
 Certificates will automatically renew and you will have a docker registry running on port 9999.
 
-To login: run `docker login YOUR_DOMAIN:9999` from your machine.
+To login: run `docker login YOUR_DOMAIN:9999` from your machine, and the docker registry UI will be `https://YOUR_DOMAIN:9998`.
